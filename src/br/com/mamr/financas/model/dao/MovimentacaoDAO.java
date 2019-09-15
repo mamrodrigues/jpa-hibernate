@@ -3,7 +3,6 @@ package br.com.mamr.financas.model.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import br.com.mamr.financas.model.Categoria;
@@ -50,9 +49,15 @@ public class MovimentacaoDAO extends BaseDAO<Movimentacao> {
     public List<Movimentacao> getListaMovimentacaoPorCategoria(Categoria categoria) {
 
         EntityManager em = new EntityManagerSingleton().getInstance();
-
-        Query query = em
+        
+        /**
+		 * TypedQuery é, como diz o nome, uma query tipada que define o retorno da query informada
+		 * Por isso é melhor que o Query
+		 * Query query = em
                 .createQuery("select m from Movimentacao m join m.categorias c where c = :pCategoria");
+		 */
+        TypedQuery<Movimentacao> query = em
+                .createQuery("select m from Movimentacao m join m.categorias c where c = :pCategoria", Movimentacao.class);
 
         query.setParameter("pCategoria", categoria);
 
